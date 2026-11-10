@@ -1,0 +1,492 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cosmic Identity - Discover Your Cosmic Blueprint</title>
+  <style>
+    #cosmic-identity {
+      --cosmic-bg: #080d1f;
+      --cosmic-panel: #101a32;
+      --cosmic-gold: #b99a5b;
+      --cosmic-gold-light: #e8d5a6;
+      --cosmic-ivory: #f5eddb;
+      --cosmic-muted: #c3c6d2;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(185,154,91,.13), transparent 42%),
+        radial-gradient(circle at 12% 24%, rgba(255,255,255,.12) 1px, transparent 1.5px),
+        radial-gradient(circle at 82% 17%, rgba(255,255,255,.16) 1px, transparent 1.5px),
+        var(--cosmic-bg);
+      background-size: auto, 130px 130px, 170px 170px, auto;
+      color: var(--cosmic-ivory);
+      padding: 70px 18px;
+      font-family: Georgia, serif;
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+    #cosmic-identity * { box-sizing: border-box; }
+    
+    #zodiac-canvas {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.6;
+      transition: opacity 1s ease;
+    }
+    
+    #cosmic-identity .cosmic-shell { max-width: 1080px; margin: 0 auto; position: relative; z-index: 2; }
+    #cosmic-identity .cosmic-intro { max-width: 720px; margin: 0 auto 34px; text-align: center; }
+    #cosmic-identity .cosmic-eyebrow { color: var(--cosmic-gold); letter-spacing: 4px; font-size: 11px; display: block; }
+    #cosmic-identity h2 { color: var(--cosmic-gold-light); font-size: clamp(30px, 5vw, 46px); font-weight: 400; line-height: 1.2; margin: 20px 0 14px; }
+    #cosmic-identity .cosmic-intro p, #cosmic-identity .cosmic-shop-intro { color: var(--cosmic-muted); line-height: 1.8; font-size: 15px; }
+    
+    #cosmic-identity .cosmic-form { max-width: 440px; margin: 0 auto; padding: 28px; border: 1px solid rgba(185,154,91,.65); background: rgba(16,26,50,.88); backdrop-filter: blur(8px); }
+    #cosmic-identity .cosmic-form label { display: block; color: var(--cosmic-gold-light); font-size: 11px; letter-spacing: 2px; margin-bottom: 12px; }
+    #cosmic-identity .cosmic-form input { width: 100%; min-height: 52px; padding: 12px 14px; color: var(--cosmic-ivory); background: #080f22; border: 1px solid var(--cosmic-gold); border-radius: 0; margin-bottom: 16px; font: inherit; color-scheme: dark; }
+    #cosmic-identity .cosmic-form button { width: 100%; min-height: 54px; padding: 14px; border: 0; background: var(--cosmic-gold); color: #080d1f; font: bold 12px Georgia,serif; letter-spacing: 2px; cursor: pointer; transition: .25s ease; }
+    #cosmic-identity .cosmic-form button:hover { background: var(--cosmic-gold-light); transform: translateY(-2px); }
+    #cosmic-identity .cosmic-error { min-height: 18px; margin: 10px 0 0; color: #f0aaaa; font-size: 13px; text-align: center; }
+    
+    #cosmic-identity .cosmic-zodiac-banner {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 15px; padding: 6px 16px;
+      border: 1px solid var(--cosmic-gold);
+      background: rgba(185,154,91,0.15);
+      border-radius: 20px; color: var(--cosmic-gold-light); font-size: 13px; letter-spacing: 1px;
+    }
+
+    #cosmic-identity .cosmic-results { margin-top: 56px; }
+    #cosmic-identity .cosmic-hero { text-align: center; padding: 38px 20px; border-top: 1px solid var(--cosmic-gold); border-bottom: 1px solid var(--cosmic-gold); background: linear-gradient(135deg, rgba(16,26,50,.9), rgba(8,13,31,.55)); }
+    #cosmic-identity .cosmic-number { color: var(--cosmic-gold-light); font-size: clamp(76px, 13vw, 112px); line-height: 1.1; margin: 12px 0; text-shadow: 0 0 28px rgba(216,187,124,.25); }
+    #cosmic-identity .cosmic-hero h3 { color: var(--cosmic-gold-light); font-size: 26px; font-weight: 400; letter-spacing: 2px; margin: 8px 0 12px; }
+    #cosmic-identity .cosmic-hero > p { max-width: 650px; margin: 0 auto; color: var(--cosmic-muted); line-height: 1.8; }
+    #cosmic-identity .cosmic-mini-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; max-width: 760px; margin: 30px auto 0; }
+    #cosmic-identity .cosmic-mini-stats div { padding: 15px 10px; border: 1px solid rgba(185,154,91,.35); background: rgba(8,13,31,0.4); }
+    #cosmic-identity .cosmic-mini-stats span { display: block; color: var(--cosmic-gold); font-size: 10px; letter-spacing: 1.5px; margin-bottom: 8px; }
+    #cosmic-identity .cosmic-mini-stats strong { color: var(--cosmic-ivory); font-size: 14px; font-weight: 400; }
+    
+    #cosmic-identity .cosmic-report { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-top: 24px; }
+    #cosmic-identity .cosmic-card { padding: 25px; border: 1px solid rgba(185,154,91,.38); background: rgba(16,26,50,.4); backdrop-filter: blur(4px); }
+    #cosmic-identity .cosmic-card-index { color: var(--cosmic-gold); font-size: 10px; letter-spacing: 2px; }
+    #cosmic-identity .cosmic-card h4 { color: var(--cosmic-gold-light); font-size: 18px; font-weight: 400; margin: 12px 0; }
+    #cosmic-identity .cosmic-card p, #cosmic-identity .cosmic-card li { color: var(--cosmic-muted); font-size: 14px; line-height: 1.9; }
+    #cosmic-identity .cosmic-card p { margin: 0; }
+    #cosmic-identity .cosmic-card ul { margin: 0; padding-left: 19px; }
+    #cosmic-identity .cosmic-card-wide { grid-column: 1 / -1; }
+    
+    #cosmic-identity .cosmic-shop { margin-top: 55px; text-align: center; }
+    #cosmic-identity .cosmic-shop h3 { color: var(--cosmic-gold-light); font-size: 29px; font-weight: 400; margin: 13px 0 8px; }
+    #cosmic-identity .cosmic-shop-intro { margin: 0 0 25px; }
+    #cosmic-identity .cosmic-product-group { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; text-align: left; }
+    #cosmic-identity .cosmic-product-group[hidden] { display: none !important; }
+    #cosmic-identity .cosmic-product { min-width: 0; border: 1px solid rgba(185,154,91,.4); background: rgba(16,26,50,.85); display: flex; flex-direction: column; justify-content: space-between; }
+    #cosmic-identity .cosmic-product-image { display: block; aspect-ratio: 1/1; overflow: hidden; background: #111a31; position: relative; }
+    #cosmic-identity .cosmic-product-image img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+    #cosmic-identity .cosmic-product:hover img { transform: scale(1.06); }
+    #cosmic-identity .cosmic-product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    #cosmic-identity .cosmic-product-info h4 { margin: 0 0 6px; font-size: 15px; font-weight: 400; line-height: 1.4; color: var(--cosmic-ivory); }
+    #cosmic-identity .cosmic-product-info p.price { color: var(--cosmic-gold-light); font-size: 14px; margin: 0 0 8px; font-weight: bold; }
+    #cosmic-identity .cosmic-product-info p.desc { color: var(--cosmic-muted); font-size: 12px; margin: 0 0 14px; line-height: 1.5; }
+    #cosmic-identity .cosmic-btn-select {
+      display: inline-block; width: 100%; text-align: center; padding: 10px;
+      border: 1px solid var(--cosmic-gold); background: transparent;
+      color: var(--cosmic-gold-light); font-size: 11px; letter-spacing: 1.5px;
+      cursor: pointer; transition: 0.2s; text-decoration: none;
+    }
+    #cosmic-identity .cosmic-btn-select:hover { background: var(--cosmic-gold); color: #080d1f; }
+    #cosmic-identity .cosmic-disclaimer { color: var(--cosmic-gold); font-size: 11px; line-height: 1.8; text-align: center; max-width: 760px; margin: 36px auto 0; }
+
+    /* Modal Component */
+    .cosmic-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(4, 7, 17, 0.85); backdrop-filter: blur(8px);
+      z-index: 9999; display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .cosmic-modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .cosmic-modal {
+      background: #0f182e; border: 1px solid var(--cosmic-gold);
+      max-width: 480px; width: 100%; padding: 30px; text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8); position: relative;
+    }
+    .cosmic-modal h3 { color: var(--cosmic-gold-light); font-size: 22px; font-weight: 400; margin: 0 0 12px; }
+    .cosmic-modal p { color: var(--cosmic-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+    .cosmic-modal-product-preview {
+      display: flex; gap: 15px; align-items: center; text-align: left;
+      padding: 12px; border: 1px solid rgba(185,154,91,0.3); background: rgba(8,13,31,0.6); margin-bottom: 24px;
+    }
+    .cosmic-modal-product-preview img { width: 64px; height: 64px; object-fit: cover; }
+    .cosmic-modal-product-preview div h4 { margin: 0 0 4px; font-size: 14px; color: var(--cosmic-ivory); }
+    .cosmic-modal-product-preview div p { margin: 0; font-size: 13px; color: var(--cosmic-gold); }
+    .cosmic-modal-btns { display: flex; gap: 12px; }
+    .cosmic-modal-btns button { flex: 1; padding: 12px; border: 1px solid var(--cosmic-gold); font-size: 12px; letter-spacing: 1px; cursor: pointer; }
+    .btn-confirm { background: var(--cosmic-gold); color: #080d1f; font-weight: bold; }
+    .btn-confirm:hover { background: var(--cosmic-gold-light); }
+    .btn-cancel { background: transparent; color: var(--cosmic-muted); }
+    .btn-cancel:hover { color: var(--cosmic-ivory); border-color: var(--cosmic-muted); }
+
+    /* Payment Section */
+    .cosmic-payment-section { margin-top: 40px; text-align: left; padding: 30px; border: 1px solid var(--cosmic-gold); background: rgba(16,26,50,0.95); }
+    .cosmic-payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 20px; }
+    .qr-card { text-align: center; padding: 20px; border: 1px dashed rgba(185,154,91,0.4); background: #080f22; }
+    .qr-card img { max-width: 200px; width: 100%; border: 4px solid #fff; margin-bottom: 10px; }
+    .bank-details { font-size: 14px; line-height: 1.8; }
+    .bank-details p { margin: 6px 0; color: var(--cosmic-muted); }
+    .bank-details strong { color: var(--cosmic-gold-light); }
+
+    @media (max-width: 700px) {
+      #cosmic-identity { padding: 45px 13px; }
+      #cosmic-identity .cosmic-report { grid-template-columns: 1fr; }
+      #cosmic-identity .cosmic-product-group { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 11px; }
+      .cosmic-payment-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cosmic-identity">
+  <canvas id="zodiac-canvas"></canvas>
+  <div class="cosmic-shell">
+    <div class="cosmic-intro">
+      <span class="cosmic-eyebrow">✦ THE COSMIC IDENTITY ✦</span>
+      <h2>Discover Your Cosmic Blueprint</h2>
+      <p>Nhập ngày tháng năm sinh của bạn để khám phá Số Đường Đời, chòm sao hoàng đạo và bộ sưu tập vật phẩm phong thủy được cá nhân hóa.</p>
+    </div>
+
+    <form class="cosmic-form" id="cosmic-form">
+      <label for="cosmic-birthdate">✦ NGÀY THÁNG NĂM SINH ✦</label>
+      <input id="cosmic-birthdate" name="birthdate" type="date" required>
+      <button type="submit">KHÁM PHÁ BẢN ĐỒ VŨ TRỤ <span aria-hidden="true">✦</span></button>
+      <p class="cosmic-error" id="cosmic-error" role="alert"></p>
+    </form>
+
+    <section class="cosmic-results" id="cosmic-results" aria-live="polite" hidden>
+      <div class="cosmic-hero">
+        <span class="cosmic-eyebrow">✦ SỐ ĐƯỜNG ĐỜI CỦA BẠN ✦</span>
+        <div class="cosmic-number" id="cosmic-life-number"></div>
+        <h3 id="cosmic-profile-title"></h3>
+        <div id="cosmic-zodiac-banner" class="cosmic-zodiac-banner"></div>
+        <p id="cosmic-summary" style="margin-top:15px;"></p>
+        <div class="cosmic-mini-stats">
+          <div><span>SỐ NGÀY SINH</span><strong id="cosmic-birthday-number"></strong></div>
+          <div><span>MÀU BIỂU TƯỢNG</span><strong id="cosmic-color"></strong></div>
+          <div><span>CHỦ ĐỀ CỐT LÕI</span><strong id="cosmic-theme"></strong></div>
+        </div>
+      </div>
+
+      <div class="cosmic-report">
+        <article class="cosmic-card">
+          <span class="cosmic-card-index">01 / TÍNH CÁCH</span>
+          <h4>Hồ Sơ Năng Lượng</h4>
+          <p id="cosmic-personality"></p>
+        </article>
+        <article class="cosmic-card">
+          <span class="cosmic-card-index">02 / THẾ MẠNH</span>
+          <h4>Điểm Mạnh Vẫn Hành</h4>
+          <ul id="cosmic-strengths"></ul>
+        </article>
+        <article class="cosmic-card">
+          <span class="cosmic-card-index">03 / THÁCH THỨC</span>
+          <h4>Bài Học Phát Triển</h4>
+          <ul id="cosmic-challenges"></ul>
+        </article>
+        <article class="cosmic-card">
+          <span class="cosmic-card-index">04 / NGUYÊN TỐ</span>
+          <h4>Yếu Tố May Mắn</h4>
+          <p id="cosmic-elements"></p>
+        </article>
+        <article class="cosmic-card cosmic-card-wide">
+          <span class="cosmic-card-index">05 / CHIÊM NGHIỆM</span>
+          <h4>Lời Khuyên Vũ Trụ</h4>
+          <p id="cosmic-reflection"></p>
+        </article>
+      </div>
+
+      <section class="cosmic-shop">
+        <span class="cosmic-eyebrow">✦ VẬT PHẨM PHONG THỦY CÁ NHÂN HÓA ✦</span>
+        <h3>Bộ Sưu Tập Theo Số Đường Đời & Tần Số Năng Lượng</h3>
+        <p class="cosmic-shop-intro">Được lựa chọn tỉ mỉ dựa trên bản đồ năng lượng của bạn.</p>
+        <div class="cosmic-product-grid" id="cosmic-product-grid"></div>
+      </section>
+
+      <section class="cosmic-payment-section" id="cosmic-payment-section" hidden>
+        <span class="cosmic-eyebrow">✦ HOÀN TẤT ĐƠN HÀNG ✦</span>
+        <h3 style="color:var(--cosmic-gold-light); margin:10px 0;">Cổng Thanh Toán Phong Thủy</h3>
+        <div class="cosmic-payment-grid">
+          <div class="qr-card">
+            <h4 style="color:var(--cosmic-gold-light); margin-top:0;">Mã QR Thanh Toán Nhanh</h4>
+            <img id="payment-qr" src="" alt="Mã QR Thanh toán">
+            <p style="font-size:12px; color:var(--cosmic-muted);">Quét mã bằng ứng dụng Ngân hàng / Momo</p>
+          </div>
+          <div class="bank-details">
+            <p>Sản phẩm lựa chọn: <strong id="pay-product-name">--</strong></p>
+            <p>Số tiền thanh toán: <strong id="pay-amount" style="color:#6ee7b7; font-size:18px;">--</strong></p>
+            <p>Mã đơn hàng vũ trụ: <strong id="pay-order-code">--</strong></p>
+            <hr style="border-color:rgba(185,154,91,0.2); margin:15px 0;">
+            <p>Ngân hàng: <strong>MBBank (Ngân Hàng Quân Đội)</strong></p>
+            <p>Số tài khoản: <strong>090123456789</strong></p>
+            <p>Chủ tài khoản: <strong>THE COSMIC IDENTITY CO</strong></p>
+            <p>Nội dung chuyển khoản: <strong id="pay-memo" style="color:var(--cosmic-gold);">--</strong></p>
+          </div>
+        </div>
+      </section>
+
+      <p class="cosmic-disclaimer">✦ Số học và Phong thủy mang tính chất tự nghiệm, giúp cân bằng tâm trí và nâng cao tần số cá nhân.</p>
+    </section>
+  </div>
+</div>
+
+<!-- Modal xác nhận -->
+<div class="cosmic-modal-overlay" id="cosmic-modal">
+  <div class="cosmic-modal">
+    <h3>Xác Nhận Lựa Chọn Vật Phẩm</h3>
+    <p>Bạn có chắc chắn muốn lựa chọn vật phẩm năng lượng này cho bản đồ vũ trụ của mình?</p>
+    <div class="cosmic-modal-product-preview">
+      <img id="modal-img" src="" alt="Product">
+      <div>
+        <h4 id="modal-title">Tên sản phẩm</h4>
+        <p id="modal-price">0 VNĐ</p>
+      </div>
+    </div>
+    <div class="cosmic-modal-btns">
+      <button class="btn-cancel" id="modal-btn-cancel">XEM LẠI</button>
+      <button class="btn-confirm" id="modal-btn-confirm">XÁC NHẬN MUA</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById('cosmic-identity');
+  if (!root || root.dataset.initialized === 'true') return;
+  root.dataset.initialized = 'true';
+
+  // --- Animation Chòm Sao Canvas ---
+  var canvas = document.getElementById('zodiac-canvas');
+  var ctx = canvas.getContext('2d');
+  var stars = [];
+  var currentZodiacColor = '#b99a5b';
+
+  function resizeCanvas() {
+    canvas.width = root.clientWidth;
+    canvas.height = root.clientHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function initStars() {
+    stars = [];
+    var numStars = Math.floor((canvas.width * canvas.height) / 8000);
+    for (var i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.8 + 0.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random()
+      });
+    }
+  }
+  initStars();
+
+  function drawConstellations() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      s.x += s.vx; s.y += s.vy;
+      if (s.x < 0) s.x = canvas.width;
+      if (s.x > canvas.width) s.x = 0;
+      if (s.y < 0) s.y = canvas.height;
+      if (s.y > canvas.height) s.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+      ctx.fillStyle = currentZodiacColor;
+      ctx.globalAlpha = 0.3 + 0.7 * Math.sin(Date.now() * 0.002 + i);
+      ctx.fill();
+
+      // Nối đường chòm sao gần nhau
+      for (var j = i + 1; j < stars.length; j++) {
+        var s2 = stars[j];
+        var dist = Math.hypot(s.x - s2.x, s.y - s2.y);
+        if (dist < 90) {
+          ctx.beginPath();
+          ctx.moveTo(s.x, s.y);
+          ctx.lineTo(s2.x, s2.y);
+          ctx.strokeStyle = currentZodiacColor;
+          ctx.globalAlpha = (1 - dist / 90) * 0.25;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(drawConstellations);
+  }
+  drawConstellations();
+
+  // --- Dữ Liệu Cung Hoàng Đạo ---
+  function getZodiacSign(day, month) {
+    if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return { name: "Bảo Bình (Aquarius)", icon: "♒", color: "#60a5fa" };
+    if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return { name: "Song Ngư (Pisces)", icon: "♓", color: "#818cf8" };
+    if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return { name: "Bạch Dương (Aries)", icon: "♈", color: "#f87171" };
+    if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return { name: "Kim Ngưu (Taurus)", icon: "♉", color: "#4ade80" };
+    if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return { name: "Song Tử (Gemini)", icon: "♊", color: "#facc15" };
+    if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return { name: "Cự Giải (Cancer)", icon: "♋", color: "#e879f9" };
+    if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return { name: "Sư Tử (Leo)", icon: "♌", color: "#fb923c" };
+    if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return { name: "Xử Nữ (Virgo)", icon: "♍", color: "#a3e635" };
+    if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return { name: "Thiên Bình (Libra)", icon: "♎", color: "#38bdf8" };
+    if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return { name: "Bọ Cạp (Scorpio)", icon: "♏", color: "#c084fc" };
+    if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return { name: "Nhân Mã (Sagittarius)", icon: "♐", color: "#f472b6" };
+    return { name: "Ma Kết (Capricorn)", icon: "♑", color: "#94a3b8" };
+  }
+
+  // --- Dữ Liệu Sản Phẩm Từ Thư Mục Google Drive ---
+  var productsDatabase = {
+    1: [
+      { name: "Tranh Số Chủ Đạo 1 - Tiên Phong", price: "450.000 VNĐ", desc: "Biểu tượng năng lượng khởi xướng, tranh mạ vàng tăng cường bản lĩnh vươn lên.", img: "https://drive.google.com/thumbnail?id=14NFS8riC2WTWO172jG-um6WXQsMDdvjS&sz=w600" },
+      { name: "Vòng Cổ Số Chủ Đạo 1 Silver", price: "380.000 VNĐ", desc: "Mặt dây chuyền chạm khắc con số 1 kích hoạt luồng khí tự tin và quyền lực.", img: "https://drive.google.com/thumbnail?id=11WELevDdkVMzpNBDUxhj8GHnZoyrUqde&sz=w600" },
+      { name: "Móc Khóa Số May Mắn Số 1", price: "120.000 VNĐ", desc: "Vật phẩm nhỏ gọn đem lại sự kiên định trên từng chặng đường mở lối thành công.", img: "https://drive.google.com/thumbnail?id=1AgQ3YQOdQNNF_r62u4BAaKoRkl7sHZZP&sz=w600" }
+    ],
+    2: [
+      { name: "Vòng Cổ Thần Số Học Số 2 - Cân Bằng", price: "390.000 VNĐ", desc: "Thiết kế mạ bạc tinh tế giúp thắt chặt sự kết nối và tình cảm trong mối quan hệ.", img: "https://drive.google.com/thumbnail?id=11WELevDdkVMzpNBDUxhj8GHnZoyrUqde&sz=w600" },
+      { name: "Đá Phong Thủy Tháng Sinh - Moonstone", price: "520.000 VNĐ", desc: "Đá mặt trăng xoa dịu cảm xúc, hỗ trợ trực giác nhạy bén cho người mang số 2.", img: "https://drive.google.com/thumbnail?id=1CBDpYnPR0TZxjbxGC0HPDJX22pfOZ9TD&sz=w600" }
+    ],
+    3: [
+      { name: "Tranh Nghệ Thuật Số 3 - Sáng Tạo", price: "480.000 VNĐ", desc: "Kích hoạt nguồn cảm hứng dồi dào, thu hút sự may mắn trong giao tiếp nghệ thuật.", img: "https://drive.google.com/thumbnail?id=14NFS8riC2WTWO172jG-um6WXQsMDdvjS&sz=w600" },
+      { name: "Tinh Thể Thạch Anh Vàng (Citrine)", price: "650.000 VNĐ", desc: "Chiêu tài lộc và tăng khả năng diễn đạt lưu khoát cho tâm hồn sáng tạo.", img: "https://drive.google.com/thumbnail?id=1DB8coqqM7I0BswUizO474wwMO2gTPCpd&sz=w600" }
+    ]
+  };
+  // Đổ dữ liệu mặc định cho các số còn lại
+  [4,5,6,7,8,9,11,22,33].forEach(function(num) {
+    productsDatabase[num] = [
+      { name: "Tranh Thần Số Học Cá Nhân Số " + num, price: "480.000 VNĐ", desc: "Bản vẽ đại diện cho tần số năng lượng riêng biệt của Số Đường Đời " + num + ".", img: "https://drive.google.com/thumbnail?id=14NFS8riC2WTWO172jG-um6WXQsMDdvjS&sz=w600" },
+      { name: "Vòng Cổ Khắc Số " + num + " Vũ Trụ", price: "390.000 VNĐ", desc: "Vật phẩm đeo hộ thân cân bằng năng lượng và thu hút may mắn.", img: "https://drive.google.com/thumbnail?id=11WELevDdkVMzpNBDUxhj8GHnZoyrUqde&sz=w600" },
+      { name: "Vòng Tay Đá Tinh Thể Phong Thủy", price: "550.000 VNĐ", desc: "Tinh thể thiên nhiên giúp giải phóng năng lượng tiêu cực.", img: "https://drive.google.com/thumbnail?id=1DB8coqqM7I0BswUizO474wwMO2gTPCpd&sz=w600" }
+    ];
+  });
+
+  // --- Tính Số Học ---
+  var profiles = {
+    1: { title: 'Người Lãnh Đạo (The Leader)', personality: 'Độc lập, kiên định và giàu sáng kiến.', strengths: ['Khởi xướng', 'Tự chủ'], challenges: ['Nóng nảy'], color: 'Vàng Kim', theme: 'Lãnh Đạo & Tiên Phong', element: 'Mặt Trời', reflection: 'Hãy dũng cảm mở lối nhưng luôn lắng nghe tập thể.' },
+    2: { title: 'Người Hoàn Hảo (The Diplomat)', personality: 'Lắng nghe, hòa nhã và tinh tế.', strengths: ['Thấu cảm', 'Hợp tác'], challenges: ['Do dự'], color: 'Bạc Mạch Kim', theme: 'Hòa Hợp & Kết Nối', element: 'Mặt Trăng', reflection: 'Biết chăm sóc bản thân trước khi gánh vác cảm xúc người khác.' },
+    3: { title: 'Tâm Hồn Sáng Tạo (The Creative)', personality: 'Trí tuệ phong phú, tràn đầy nhiệt huyết.', strengths: ['Sáng tạo', 'Diễn đạt'], challenges: ['Thiếu tập trung'], color: 'Vàng Nắng', theme: 'Bày Tỏ & Cảm Hứng', element: 'Vì Sao', reflection: 'Tập trung năng lượng vào một mục tiêu lớn.' }
+  };
+  [4,5,6,7,8,9,11,22,33].forEach(function(n){
+    if(!profiles[n]) profiles[n] = { title: 'Con Số Bản Lĩnh ' + n, personality: 'Năng lượng mạnh mẽ và đầy khát vọng.', strengths: ['Bản lĩnh', 'Tập trung'], challenges: ['Áp lực'], color: 'Hổ Phách', theme: 'Phát Triển Bản Thân', element: 'Vũ Trụ', reflection: 'Kiên trì theo đuổi sứ mệnh cá nhân.' };
+  });
+
+  function digitSum(val) { return String(val).split('').reduce(function (a, b) { return a + Number(b); }, 0); }
+  function reduceNumber(val) { while (val > 9 && val !== 11 && val !== 22 && val !== 33) { val = digitSum(val); } return val; }
+
+  // --- Xử Lý Sự Kiện Form & UI ---
+  var form = document.getElementById('cosmic-form');
+  var input = document.getElementById('cosmic-birthdate');
+  var results = document.getElementById('cosmic-results');
+  var modal = document.getElementById('cosmic-modal');
+  var selectedProductForBuy = null;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var val = input.value;
+    if (!val) return;
+    var parts = val.split('-').map(Number);
+    var year = parts[0], month = parts[1], day = parts[2];
+
+    // Cập nhật chòm sao & Animation
+    var zodiac = getZodiacSign(day, month);
+    currentZodiacColor = zodiac.color;
+    document.getElementById('cosmic-zodiac-banner').innerHTML = '<span>' + zodiac.icon + '</span> Chòm Sao Tháng Sinh: <strong>' + zodiac.name + '</strong>';
+
+    // Tính thần số
+    var lifePath = reduceNumber(digitSum(val.replace(/-/g, '')));
+    var birthday = reduceNumber(day);
+    var profile = profiles[lifePath];
+
+    document.getElementById('cosmic-life-number').textContent = lifePath;
+    document.getElementById('cosmic-profile-title').textContent = profile.title;
+    document.getElementById('cosmic-birthday-number').textContent = birthday;
+    document.getElementById('cosmic-color').textContent = profile.color;
+    document.getElementById('cosmic-theme').textContent = profile.theme;
+    document.getElementById('cosmic-personality').textContent = profile.personality;
+    document.getElementById('cosmic-elements').textContent = 'Biểu tượng: ' + profile.color + ' | Nguyên tố hỗ trợ: ' + profile.element;
+    document.getElementById('cosmic-reflection').textContent = profile.reflection;
+
+    // Render Sản Phẩm Phong Thủy
+    var shopGrid = document.getElementById('cosmic-product-grid');
+    shopGrid.innerHTML = '';
+    var groupDiv = document.createElement('div');
+    groupDiv.className = 'cosmic-product-group';
+
+    var items = productsDatabase[lifePath] || productsDatabase[1];
+    items.forEach(function (prod) {
+      var prodEl = document.createElement('article');
+      prodEl.className = 'cosmic-product';
+      prodEl.innerHTML = `
+        <div class="cosmic-product-image">
+          <img src="${prod.img}" alt="${prod.name}">
+        </div>
+        <div class="cosmic-product-info">
+          <div>
+            <h4>${prod.name}</h4>
+            <p class="price">${prod.price}</p>
+            <p class="desc">${prod.desc}</p>
+          </div>
+          <button class="cosmic-btn-select">MUA NGAY ↗</button>
+        </div>
+      `;
+      prodEl.querySelector('.cosmic-btn-select').addEventListener('click', function () {
+        openModal(prod);
+      });
+      groupDiv.appendChild(prodEl);
+    });
+    shopGrid.appendChild(groupDiv);
+
+    results.hidden = false;
+    document.getElementById('cosmic-payment-section').hidden = true;
+    results.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // --- Logic Modal & Thanh Toán ---
+  function openModal(prod) {
+    selectedProductForBuy = prod;
+    document.getElementById('modal-title').textContent = prod.name;
+    document.getElementById('modal-price').textContent = prod.price;
+    document.getElementById('modal-img').src = prod.img;
+    modal.classList.add('active');
+  }
+
+  document.getElementById('modal-btn-cancel').addEventListener('click', function () {
+    modal.classList.remove('active');
+  });
+
+  document.getElementById('modal-btn-confirm').addEventListener('click', function () {
+    modal.classList.remove('active');
+    if (selectedProductForBuy) {
+      showPayment(selectedProductForBuy);
+    }
+  });
+
+  function showPayment(prod) {
+    var paySection = document.getElementById('cosmic-payment-section');
+    var orderCode = 'COSMIC' + Math.floor(100000 + Math.random() * 900000);
+    var cleanPrice = prod.price.replace(/[^0-9]/g, '');
+
+    document.getElementById('pay-product-name').textContent = prod.name;
+    document.getElementById('pay-amount').textContent = prod.price;
+    document.getElementById('pay-order-code').textContent = orderCode;
+    document.getElementById('pay-memo').textContent = orderCode + ' METAPHYSICS';
+
+    // VietQR API Link
+    var qrUrl = `https://img.vietqr.io/image/MB-090123456789-compact.png?amount=${cleanPrice}&addInfo=${orderCode}&accountName=THE%20COSMIC%20IDENTITY`;
+    document.getElementById('payment-qr').src = qrUrl;
+
+    paySection.hidden = false;
+    paySection.scrollIntoView({ behavior: 'smooth' });
+  }
+})();
+</script>
+</body>
+</html>
